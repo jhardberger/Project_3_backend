@@ -9,6 +9,16 @@ const Place = require('../models/place');
 
 const baseEndPoint = 'https://api.census.gov/data/2017/pep/population?get='
 
+//Search route
+router.get('/stateSearch/:state', async (req,res,next) => {
+	try {
+		console.log('search route called');
+		console.log(req.params.state, 'state');
+	} catch(err) {
+		next(err);
+	}
+})
+
 //State seed route--THIS HAS BEEN RUN
 router.get('/seed/states', async (req,res,next) => {
 	try {
