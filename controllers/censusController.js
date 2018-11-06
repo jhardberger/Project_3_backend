@@ -43,6 +43,19 @@ router.post('/state', async (req,res,next) => {
 	}
 })
 
+//State delete route--user can delete UserState from user collection
+router.delete('/state/:id', async (req,res,next) => {
+	try {
+		const deletedState = await UserState.findByIdAndRemove(req.params.id);
+		res.json({
+			status: 200,
+			data: deletedState
+		})
+	} catch(err) {
+		next(err);
+	}
+})
+
 //User state get route--feeds all existing user states to front end
 router.get('/states', async (req,res,next) => {
 	try {
