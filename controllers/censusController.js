@@ -69,6 +69,36 @@ router.get('/states', async (req,res,next) => {
 	}
 })
 
+//Place search route--finds place from local db and returns JSON object
+router.get('/placeSearch/:place', async (req,res,next) => {
+	try {
+		console.log('search route called');
+		console.log(req.params.place, 'place');
+		const placeSearch = req.params.place;
+		const foundPlace = await Place.find({
+			name: {$regex: ".*"+placeSearch+".*"}
+		})
+		console.log(foundPlace, 'foundPlace');
+		res.json({
+			status: 200,
+			data: foundPlace
+		})
+	} catch(err) {
+		next(err);
+	}
+})
+
+
+
+
+
+
+
+
+
+
+
+
 //State seed route--THIS HAS BEEN RUN
 router.get('/seed/states', async (req,res,next) => {
 	try {
