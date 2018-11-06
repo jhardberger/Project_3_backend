@@ -43,6 +43,19 @@ router.post('/state', async (req,res,next) => {
 	}
 })
 
+//User state get route--feeds all existing user states to front end
+router.get('/states', async (req,res,next) => {
+	try {
+		const userStates = await UserState.find();
+		res.json({
+			status: 200,
+			data: userStates
+		})
+	} catch(err) {
+		next(err);
+	}
+})
+
 //State seed route--THIS HAS BEEN RUN
 router.get('/seed/states', async (req,res,next) => {
 	try {
