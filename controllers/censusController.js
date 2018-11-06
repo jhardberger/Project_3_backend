@@ -14,6 +14,14 @@ router.get('/stateSearch/:state', async (req,res,next) => {
 	try {
 		console.log('search route called');
 		console.log(req.params.state, 'state');
+		const foundState = await State.find({
+			name: req.params.state
+		})
+		console.log(foundState, 'foundState');
+		res.json({
+			status: 200,
+			data: foundState
+		})
 	} catch(err) {
 		next(err);
 	}
