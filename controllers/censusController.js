@@ -88,9 +88,33 @@ router.get('/placeSearch/:place', async (req,res,next) => {
 	}
 })
 
+//Place post route--user can save their own UserPlace to non-seed collection
+router.post('/place', async (req,res,next) => {
+	try {
+		console.log(req.body, 'this is req.body');
+		const newUserPlace = await UserPlace.create(req.body);
+		console.log(newUserPlace);
+		res.json({
+			status: 200,
+			data: newUserPlace
+		})
+	} catch(err) {
+		next(err);
+	}
+})
 
-
-
+//User place get route--feeds all existing user places to front end
+router.get('/places', async (req,res,next) => {
+	try {
+		const userPlaces = await UserPlace.find();
+		res.json({
+			status: 200,
+			data: userPlaces
+		})
+	} catch(err) {
+		next(err);
+	}
+})
 
 
 
