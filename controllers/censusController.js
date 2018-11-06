@@ -3,13 +3,14 @@ const router = express.Router();
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
 const apiKey = require('../apiKey');
-//will need to bring in geographical models here
 const State = require('../models/state');
 const Place = require('../models/place');
+const UserState = require('../models/userState');
+const UserPlace = require('../models/userPlace');
 
 const baseEndPoint = 'https://api.census.gov/data/2017/pep/population?get='
 
-//Search route
+//State search route--finds state from local db and returns JSON object
 router.get('/stateSearch/:state', async (req,res,next) => {
 	try {
 		console.log('search route called');
@@ -21,6 +22,21 @@ router.get('/stateSearch/:state', async (req,res,next) => {
 		res.json({
 			status: 200,
 			data: foundState
+		})
+	} catch(err) {
+		next(err);
+	}
+})
+
+//State post route--user can save their own UserState to non-seed collection
+router.post('/state', async (req,res,next) => {
+	try {
+		console.log(req.body, 'this is req.body');
+		const newUserState = await UserState.create(req.body);
+		console.log(newUserState);
+		res.json({
+			status: 200,
+			data: newUserState
 		})
 	} catch(err) {
 		next(err);
