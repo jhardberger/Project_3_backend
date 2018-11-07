@@ -23,6 +23,7 @@ app.use(cors(corsOptions));
 const censusController = require('./controllers/censusController');
 const mapController = require('./controllers/mapController');
 app.use('/api/v1/census', censusController);
+app.use('/api/v1/map', mapController)
 
 //USE MIDDLEWARE
 

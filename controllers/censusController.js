@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
-const apiKey = require('../apiKey');
+// const apiKey = require('../apiKey');
 //will need to bring in geographical models here
 const State = require('../models/state');
 const Place = require('../models/place');
