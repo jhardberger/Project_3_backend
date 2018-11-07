@@ -116,7 +116,18 @@ router.get('/places', async (req,res,next) => {
 	}
 })
 
-
+//Place delete route--user can delete UserPlace from user collection
+router.delete('/place/:id', async (req,res,next) => {
+	try {
+		const deletedPlace = await UserPlace.findByIdAndRemove(req.params.id);
+		res.json({
+			status: 200,
+			data: deletedPlace
+		})
+	} catch(err) {
+		next(err);
+	}
+})
 
 
 
