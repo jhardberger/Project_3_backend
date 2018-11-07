@@ -130,7 +130,36 @@ router.delete('/place/:id', async (req,res,next) => {
 	}
 })
 
+//State question route
+router.get('/question/state', async (req,res,next) => {
+	try {
+		const randStates = await State.aggregate([{
+			$sample: {size: 2}
+		}])
+		res.json({
+			status: 200,
+			data: randStates
+		})
+	} catch(err) {
+		next(err);
+	}
+})
 
+//Place question route
+router.get('/question/place', async (req,res,next) => {
+	try {
+		const randPlaces = await Place.aggregate([
+			{$match: {pop: {$gte: 100000}}},
+			{$sample: {size: 2}}
+		])
+		res.json({
+			status: 200,
+			data: randPlaces
+		})
+	} catch(err) {
+		next(err);
+	}
+})
 
 
 
