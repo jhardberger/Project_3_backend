@@ -7,6 +7,7 @@ const State = require('../models/state');
 const Place = require('../models/place');
 const UserState = require('../models/userState');
 const UserPlace = require('../models/userPlace');
+const Answer = require('../models/answer');
 
 const baseEndPoint = 'https://api.census.gov/data/2017/pep/population?get='
 
@@ -160,7 +161,19 @@ router.get('/question/place', async (req,res,next) => {
 	}
 })
 
-
+//Answer post route: creates new answer, will eventually need to return aggregation of answers
+router.post('/answer', async (req,res,next) => {
+	try {
+		console.log(req.body, 'this is req.body');
+		const newAnswer = await Answer.create(req.body);
+		res.json({
+			status: 200,
+			data: newAnswer
+		})
+	} catch(err) {
+		next(err);
+	}
+})
 
 
 //State seed route--THIS HAS BEEN RUN
