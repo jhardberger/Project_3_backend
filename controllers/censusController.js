@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
-const apiKey = require('../apiKey');
+// const apiKey = require('../apiKey');
 const State = require('../models/state');
 const Place = require('../models/place');
 const UserState = require('../models/userState');
 const UserPlace = require('../models/userPlace');
 const Answer = require('../models/answer');
+require('dotenv').config();
 
 const baseEndPoint = 'https://api.census.gov/data/2017/pep/population?get='
 
@@ -240,7 +241,7 @@ router.get('/seed/states', async (req,res,next) => {
 router.get('/seed/places', async (req,res,next) => {
 	try {
 		//make api call
-		const allPlaces = await fetch(baseEndPoint + 'GEONAME,POP,DENSITY&for=place:*&key=' + apiKey);
+		const allPlaces = await fetch(baseEndPoint + 'GEONAME,POP,DENSITY&for=place:*&key=' + process.env.apiKey);
 		const allPlacesJson = await allPlaces.json();
 		const allPlacesMap = await allPlacesJson.map((place,i) => {
 			return ({
