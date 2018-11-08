@@ -175,6 +175,43 @@ router.post('/answer', async (req,res,next) => {
 	}
 })
 
+//Estimate answers get route: averages estimate pctDifs
+router.get('/answer/est', async (req,res,next) => {
+	try {
+		const avgPctDif = await Answer.aggregate([
+			{$match: {type: 'Estimate'}},
+			{$group: {
+				_id: null,
+				avgPctDif: {$avg: '$pctDif'}
+			}}
+		])
+		res.json({
+			status: 200,
+			data: avgPctDif
+		})
+	} catch(err) {
+		next(err);
+	}
+})
+
+//Comparison answers get route: averages comparison isCorrect
+router.get('/answer/comp', async (req,res,next) => {
+	try {
+		const pctCorrect = await Answer.aggregate([
+			{$match: {type: 'Comparison'}},
+			{$group: {
+				_id: null,
+				pctCorrect: {$avg: '$isCorrect'}
+			}}
+		])
+		res.json({
+			status: 200,
+			data: pctCorrect
+		})
+	} catch(err) {
+		next(err);
+	}
+})
 
 //State seed route--THIS HAS BEEN RUN
 router.get('/seed/states', async (req,res,next) => {
