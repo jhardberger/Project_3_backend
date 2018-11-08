@@ -8,6 +8,7 @@ const State = require('../models/state');
 const Place = require('../models/place');
 const UserState = require('../models/userState');
 const UserPlace = require('../models/userPlace');
+const Answer = require('../models/answer');
 
 const baseEndPoint = 'https://api.census.gov/data/2017/pep/population?get='
 
@@ -161,8 +162,57 @@ router.get('/question/place', async (req,res,next) => {
 	}
 })
 
+//Answer post route: creates new answer, will eventually need to return aggregation of answers
+router.post('/answer', async (req,res,next) => {
+	try {
+		console.log(req.body, 'this is req.body');
+		const newAnswer = await Answer.create(req.body);
+		res.json({
+			status: 200,
+			data: newAnswer
+		})
+	} catch(err) {
+		next(err);
+	}
+})
 
+//Estimate answers get route: averages estimate pctDifs
+router.get('/answer/est', async (req,res,next) => {
+	try {
+		const avgPctDif = await Answer.aggregate([
+			{$match: {type: 'Estimate'}},
+			{$group: {
+				_id: null,
+				avgPctDif: {$avg: '$pctDif'}
+			}}
+		])
+		res.json({
+			status: 200,
+			data: avgPctDif
+		})
+	} catch(err) {
+		next(err);
+	}
+})
 
+//Comparison answers get route: averages comparison isCorrect
+router.get('/answer/comp', async (req,res,next) => {
+	try {
+		const pctCorrect = await Answer.aggregate([
+			{$match: {type: 'Comparison'}},
+			{$group: {
+				_id: null,
+				pctCorrect: {$avg: '$isCorrect'}
+			}}
+		])
+		res.json({
+			status: 200,
+			data: pctCorrect
+		})
+	} catch(err) {
+		next(err);
+	}
+})
 
 //State seed route--THIS HAS BEEN RUN
 router.get('/seed/states', async (req,res,next) => {
