@@ -261,5 +261,30 @@ router.get('/seed/places', async (req,res,next) => {
 	}
 })
 
+//UserState seed route
+router.get('/seed/userstates', async (req,res,next) => {
+	try {
+		const foundState = await State.find({
+			name: 'Illinois'
+		});
+		const newUserState = await UserState.create(foundState);
+		res.send(newUserState)
+	} catch(err) {
+		next(err);
+	}
+})
+
+//UserPlace seed route
+router.get('/seed/userplaces', async (req,res,next) => {
+	try {
+		const foundPlace = await Place.find({
+			name: 'Chicago city, Illinois'
+		});
+		const newUserPlace = await UserPlace.create(foundPlace);
+		res.send(newUserPlace)
+	} catch(err) {
+		next(err);
+	}
+})
 
 module.exports = router;
