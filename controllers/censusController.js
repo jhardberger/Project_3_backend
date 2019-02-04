@@ -2,13 +2,18 @@ const express = require('express');
 const router = express.Router();
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
+<<<<<<< HEAD
 //will need to bring in geographical models here
 const apiKey = require('../apiKey');
+=======
+// const apiKey = require('../apiKey');
+>>>>>>> 2df40efc9f6136119ed150ba4604b25509c2290c
 const State = require('../models/state');
 const Place = require('../models/place');
 const UserState = require('../models/userState');
 const UserPlace = require('../models/userPlace');
 const Answer = require('../models/answer');
+require('dotenv').config();
 
 const baseEndPoint = 'https://api.census.gov/data/2017/pep/population?get='
 
@@ -241,7 +246,7 @@ router.get('/seed/states', async (req,res,next) => {
 router.get('/seed/places', async (req,res,next) => {
 	try {
 		//make api call
-		const allPlaces = await fetch(baseEndPoint + 'GEONAME,POP,DENSITY&for=place:*&key=' + apiKey);
+		const allPlaces = await fetch(baseEndPoint + 'GEONAME,POP,DENSITY&for=place:*&key=' + process.env.apiKey);
 		const allPlacesJson = await allPlaces.json();
 		const allPlacesMap = await allPlacesJson.map((place,i) => {
 			return ({
@@ -261,5 +266,30 @@ router.get('/seed/places', async (req,res,next) => {
 	}
 })
 
+//UserState seed route
+router.get('/seed/userstates', async (req,res,next) => {
+	try {
+		const foundState = await State.find({
+			name: 'Illinois'
+		});
+		const newUserState = await UserState.create(foundState);
+		res.send(newUserState)
+	} catch(err) {
+		next(err);
+	}
+})
+
+//UserPlace seed route
+router.get('/seed/userplaces', async (req,res,next) => {
+	try {
+		const foundPlace = await Place.find({
+			name: 'Chicago city, Illinois'
+		});
+		const newUserPlace = await UserPlace.create(foundPlace);
+		res.send(newUserPlace)
+	} catch(err) {
+		next(err);
+	}
+})
 
 module.exports = router;
